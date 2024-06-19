@@ -5,11 +5,18 @@ using UnityEngine.UIElements;
 
 public class EnermyControl : MonoBehaviour
 {
+    GameObject scoreTextGO;
+    public GameObject ExpliosionGO;
+
     float speed;
+    bool isHit = false;
     // Start is called before the first frame update
     void Start()
     {
         speed = 2f;
+
+        //Get the score text UI 
+        scoreTextGO = GameObject.FindGameObjectWithTag("ScoreTextTag");
     }
 
     // Update is called once per frame
@@ -32,5 +39,32 @@ public class EnermyControl : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+       //Detect collision with player bullet
+       if(collision.tag == "PlayerBulletTag" || collision.tag == "PlayerShipTag" )
+        {
+            EnemyExplosion();
+
+            if (!isHit)
+            {
+                isHit = true;
+                //add 100 points to the score 
+                scoreTextGO.GetComponent<GameScore>().Score += 100;
+                StartCoroutine(HitCooldown());
+            }
+            Destroy (gameObject);
+        }
+    }
+    IEnumerator HitCooldown()
+    {
+        yield return new WaitForSeconds(0.1f);
+        isHit = false;
+    }
+    void EnemyExplosion()
+    {
+        GameObject explosion = (GameObject)Instantiate(ExpliosionGO);
+        explosion.transform.position = transform.position;
     }
 }

@@ -5,13 +5,11 @@ using UnityEngine;
 public class EnemySpawner : MonoBehaviour
 {
     public GameObject EnemyGO;
-    float maxSpawnRateInSecond = 5f;
+    public float maxSpawnRateInSecond = 1f;
     // Start is called before the first frame update 
     void Start()
     {
-        Invoke("SpawnEnemy", maxSpawnRateInSecond);
-        //increase spawn rate every 30 seconds
-        InvokeRepeating("IncreaseSpawnRate", 0f, 30f);
+
     }
 
     // Update is called once per frame
@@ -46,10 +44,11 @@ public class EnemySpawner : MonoBehaviour
         {
             spawnInNSecond = 1f;
         }
-        Invoke("SpawnEnemy", spawnInNSecond);    
+        Invoke("SpawnEnemy", spawnInNSecond);
+    }
     //function to increase the difficulty of the game 
     void IncreaseSpawnRate()
-        {
+    {
             if(maxSpawnRateInSecond > 1f)
             {
                 maxSpawnRateInSecond--;
@@ -58,6 +57,19 @@ public class EnemySpawner : MonoBehaviour
             {
                 CancelInvoke("IncreaseSpawnRate");
             }
-        }
+    }
+    public void ScheduleEnemySpawner()
+    {
+        //reset max spawn rate 
+        float maxSpawnRateInSecond = 5f;
+
+        Invoke("SpawnEnemy", maxSpawnRateInSecond);
+        InvokeRepeating("IncreaseSpawnRate", 0f, 30f);
+    }
+    //Function to stop enemy spawner
+    public void UnScheduleEnemySpawner()
+    {
+        CancelInvoke("SpawnEnemy");
+        CancelInvoke("IncreaseSpawnRate");
     }
 }

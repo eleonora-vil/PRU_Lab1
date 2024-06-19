@@ -41,7 +41,7 @@ public class EnemyBullet : MonoBehaviour
             //remove bullet if go outside
             Vector2 min = Camera.main.ViewportToWorldPoint(new Vector2(0, 0));//bottom-left screen 
 
-            Vector2 max = Camera.main.ViewportToWorldPoint(new Vector2(1, 1));//top-right screen
+            Vector2 max = Camera.main.ViewportToWorldPoint(new Vector2(1, 2));//top-right screen
 
             if (transform.position.x < min.x 
                 || transform.position.x > max.x 
@@ -50,6 +50,13 @@ public class EnemyBullet : MonoBehaviour
             {
                 Destroy(gameObject);
             }
+        }
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.tag == "PlayerShipTag")
+        {
+            Destroy(gameObject);
         }
     }
 }
